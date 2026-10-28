@@ -1,0 +1,249 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>MahoKARSHa Mind Scan</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=DM+Sans:wght@400;600&display=swap">
+<style>
+/* Layout: one centred 420px column, one screen at a time, phone first.
+   Single committed look: plum ground, lavender text, violet accent. */
+:root{
+  --plum:#2B1250; --plum-2:#3A1C69; --violet:#8E52E0; --violet-hi:#B089F0;
+  --lav:#FAF7FF; --mute:#C9B8EA; --good:#7BE0A8; --bad:#FF8FA3;
+  --display:'Bricolage Grotesque','Trebuchet MS',sans-serif;
+  --body:'DM Sans','Segoe UI',sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{margin:0;background:linear-gradient(180deg,var(--plum) 0%,#1F0C3C 100%);color:var(--lav);font:16px/1.5 var(--body);
+  padding-block:20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main{max-width:420px;margin:0 auto;display:flex;flex-direction:column;gap:18px;min-height:calc(100vh - 40px)}
+.tag{font:600 12px var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--violet-hi)}
+h1{font:800 38px/1.05 var(--display);margin:4px 0 0;text-wrap:balance}
+h2{font:800 26px/1.1 var(--display);margin:0;text-wrap:balance}
+p{margin:0;color:var(--mute)}
+.bar{height:6px;background:var(--plum-2);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--violet);transition:width .3s}
+label{font-weight:600;font-size:14px;display:block;margin-bottom:6px}
+input{width:100%;padding:14px;border-radius:12px;border:2px solid var(--plum-2);background:#240F44;color:var(--lav);font:16px var(--body)}
+input:focus-visible,button:focus-visible,.cell:focus-visible{outline:3px solid var(--violet-hi);outline-offset:2px}
+.btn{appearance:none;border:0;border-radius:14px;padding:16px 18px;background:var(--violet);color:#fff;font:800 17px var(--display);cursor:pointer;text-align:center;text-decoration:none;display:block;width:100%}
+.btn.big{padding:22px 18px;font-size:20px;background:linear-gradient(90deg,#C25BD9,#8E52E0);box-shadow:0 8px 24px rgba(142,82,224,.45)}
+.btn.ghost{background:transparent;border:2px solid var(--violet);color:var(--lav)}
+.small{font-size:13px;color:var(--mute)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;aspect-ratio:1}
+.cell{border:0;border-radius:16px;background:var(--plum-2);cursor:pointer;transition:background .12s,transform .12s}
+.cell.on{background:var(--violet-hi);transform:scale(.94)}
+.cell.ok{background:var(--good)} .cell.no{background:var(--bad)}
+.status{font:800 20px var(--display);text-align:center;min-height:30px}
+.pad{width:100%;aspect-ratio:1;border:0;border-radius:24px;background:var(--plum-2);color:var(--lav);font:800 26px var(--display);cursor:pointer}
+.pad.go{background:var(--violet-hi);color:var(--plum)}
+.pad.early{background:var(--bad);color:var(--plum)}
+.card{border-radius:24px;padding:24px;background:linear-gradient(160deg,var(--violet) 0%,var(--plum-2) 70%);display:flex;flex-direction:column;gap:10px}
+.card .lvl{font:800 64px/1 var(--display)}
+.card .cls{font:800 22px var(--display)}
+.stats{display:flex;gap:18px;flex-wrap:wrap}
+.stats div{min-width:0}
+.stats b{display:block;font:800 22px var(--display)}
+.handle{font-weight:600;color:var(--lav)}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<main>
+  <!-- INTRO -->
+  <section id="s-intro" style="display:flex;flex-direction:column;gap:18px">
+    <div><div class="tag">MahoKARSHa · Day 3 · Mind</div>
+    <h1>Find your Mind Level.</h1></div>
+    <p>Two quick rounds, about 60 seconds. Memory first, then reflexes. You get a level and a class you can post.</p>
+    <div>
+      <label for="ig">Your Instagram handle (optional)</label>
+      <input id="ig" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="@yourname" maxlength="31">
+      <p class="small" style="margin-top:6px">It only appears on your result card on this screen. Nothing is stored or sent from this page.</p>
+    </div>
+    <button class="btn" id="start">Start the scan</button>
+    <p class="small">A game for fun, not a medical or clinical test.</p>
+  </section>
+
+  <!-- ROUND 1 -->
+  <section id="s-mem" hidden style="display:flex;flex-direction:column;gap:16px">
+    <div class="tag">Round 1 of 2 · Memory</div>
+    <div class="bar"><i id="memBar"></i></div>
+    <div class="status" id="memStatus">Watch the pattern</div>
+    <div class="grid" id="grid"></div>
+    <p class="small" style="text-align:center" id="memNote">Repeat it in the same order.</p>
+  </section>
+
+  <!-- ROUND 2 -->
+  <section id="s-rx" hidden style="display:flex;flex-direction:column;gap:16px">
+    <div class="tag">Round 2 of 2 · Reflex</div>
+    <div class="bar"><i id="rxBar"></i></div>
+    <div class="status" id="rxStatus">Tap when the square turns light violet</div>
+    <button class="pad" id="pad">Wait…</button>
+    <p class="small" style="text-align:center" id="rxNote">Tap too early and the trial restarts.</p>
+  </section>
+
+  <!-- RESULT -->
+  <section id="s-res" hidden style="display:flex;flex-direction:column;gap:18px">
+    <div class="tag">Scan complete</div>
+    <div class="card" id="card">
+      <div class="small" style="color:var(--lav)">MAHOKARSHA · MIND SCAN</div>
+      <div class="handle" id="rHandle"></div>
+      <div class="lvl" id="rLvl"></div>
+      <div class="cls" id="rCls"></div>
+      <div class="stats">
+        <div><b id="rMem"></b><span class="small" style="color:var(--lav)">memory</span></div>
+        <div><b id="rRx"></b><span class="small" style="color:var(--lav)">reflex</span></div>
+        <div><b id="rScore"></b><span class="small" style="color:var(--lav)">score</span></div>
+      </div>
+    </div>
+    <p id="rLine"></p>
+    <p><b style="color:var(--lav)">1. Screenshot this card. 2. Tap the big button to open a DM with us and send it, and paste. Your result text is copied automatically. Or post it to your Story and tag @maho.karsha.</b> We will see your level.</p>
+    <div class="card" style="background:var(--plum-2);gap:8px"><div class="small" style="color:var(--lav)">Your result as text (copied when you tap the big button)</div><textarea id="rText" readonly rows="3" style="width:100%;border:0;border-radius:10px;padding:10px;background:#240F44;color:var(--lav);font:14px var(--body);resize:none"></textarea><button class="btn ghost" id="copyBtn" type="button">Copy result</button></div>
+    <a class="btn big" id="igBtn" href="https://ig.me/m/maho.karsha" target="_blank" rel="noopener">Send my result in DM · @maho.karsha</a>
+    <a class="btn ghost" id="igProfile" href="https://www.instagram.com/maho.karsha/" target="_blank" rel="noopener">Open @maho.karsha profile</a>
+    <a class="btn" id="formBtn" href="#" target="_blank" rel="noopener" hidden>Send my result to MahoKARSHa</a>
+    <button class="btn ghost" id="again">Try again</button>
+    <p class="small">Day 4 is Health. Follow @maho.karsha.</p>
+  </section>
+</main>
+
+<script>
+(function(){
+  // Optional: paste a Google Form link here. Leave empty to hide the button.
+  var FORM_URL = "";
+
+  var $ = function(id){return document.getElementById(id)};
+  var screens = ["s-intro","s-mem","s-rx","s-res"];
+  function show(id){screens.forEach(function(s){var e=$(s);e.hidden=(s!==id)})}
+  var sleep = function(ms){return new Promise(function(r){setTimeout(r,ms)})};
+  var run = 0; // cancels stale async flows when restarting
+
+  var resultText = "";
+  function copyResult(){
+    var ok=false;
+    try{ navigator.clipboard.writeText(resultText).then(function(){$("copyBtn").textContent="Copied"},function(){fallback()}); ok=true; }catch(e){}
+    if(!ok) fallback();
+    function fallback(){ var t=$("rText"); t.focus(); t.select(); try{document.execCommand("copy")}catch(e){} $("copyBtn").textContent="Selected: long-press and copy"; }
+  }
+  $("copyBtn").onclick=copyResult;
+  $("igBtn").addEventListener("click",copyResult);
+  var handle = "";
+  var memBest = 0, rxAvg = 0;
+
+  // ---------- Round 1: sequence memory ----------
+  var grid = $("grid"), cells = [];
+  for (var i=0;i<9;i++){
+    var b=document.createElement("button");
+    b.className="cell"; b.setAttribute("aria-label","tile "+(i+1)); b.dataset.i=i;
+    grid.appendChild(b); cells.push(b);
+  }
+  var MAXLEN = 8;
+  // A brand new random pattern every round; no tile repeats back to back.
+  function newSeq(n){
+    var s=[],last=-1;
+    for(var i=0;i<n;i++){var x;do{x=Math.floor(Math.random()*9)}while(x===last);s.push(x);last=x}
+    return s;
+  }
+  function flash(i,cls,ms){
+    var c=cells[i]; c.classList.add(cls);
+    return sleep(ms).then(function(){c.classList.remove(cls)});
+  }
+  async function memory(token){
+    show("s-mem");
+    var seq=[], len=0, locked=true, pos=0, done=false, failed=false;
+    var resolveRound;
+    function setBar(){ $("memBar").style.width = (len/MAXLEN*100)+"%"; }
+    function onTap(e){
+      var t=e.target.closest(".cell"); if(!t||locked||token!==run) return;
+      var i=+t.dataset.i;
+      if(i===seq[pos]){
+        flash(i,"ok",160); pos++;
+        if(pos===seq.length){ locked=true; resolveRound("next"); }
+      } else {
+        flash(i,"no",300); flash(seq[pos],"on",300); locked=true; resolveRound("fail");
+      }
+    }
+    grid.onclick=onTap;
+    while(!done && token===run){
+      seq=newSeq(seq.length+1); len=seq.length-1; setBar();
+      $("memStatus").textContent="Watch the pattern"; $("memNote").textContent="Length "+seq.length;
+      locked=true; pos=0; await sleep(600);
+      for (var k=0;k<seq.length;k++){ if(token!==run) return null; await flash(seq[k],"on",420); await sleep(180); }
+      $("memStatus").textContent="Your turn"; locked=false;
+      var res = await new Promise(function(r){resolveRound=r});
+      if(token!==run) return null;
+      if(res==="fail"){ memBest=seq.length-1; done=true; $("memStatus").textContent="Pattern lost at "+seq.length; await sleep(1100); }
+      else { memBest=seq.length; setBar(); if(seq.length>=MAXLEN){ done=true; $("memStatus").textContent="Perfect memory"; await sleep(900);} else { $("memStatus").textContent="Good"; await sleep(500);} }
+    }
+    return token===run;
+  }
+
+  // ---------- Round 2: reflex ----------
+  async function reflex(token){
+    show("s-rx");
+    var pad=$("pad"), times=[];
+    var state="idle", t0=0, resolveTap;
+    pad.onclick=function(){ if(resolveTap) resolveTap(); };
+    for (var n=0;n<3 && token===run;n++){
+      $("rxBar").style.width=(n/3*100)+"%";
+      var ok=false;
+      while(!ok && token===run){
+        pad.className="pad"; pad.textContent="Wait…"; $("rxStatus").textContent="Trial "+(n+1)+" of 3";
+        state="wait";
+        var delay=1200+Math.random()*2200;
+        var early=await Promise.race([
+          new Promise(function(r){resolveTap=function(){r(true)}}),
+          sleep(delay).then(function(){return false})
+        ]);
+        if(token!==run) return null;
+        if(early){ pad.className="pad early"; pad.textContent="Too early"; await sleep(900); continue; }
+        state="go"; pad.className="pad go"; pad.textContent="TAP"; t0=performance.now();
+        await new Promise(function(r){resolveTap=r});
+        var ms=Math.round(performance.now()-t0); times.push(ms);
+        pad.className="pad"; pad.textContent=ms+" ms"; await sleep(900); ok=true;
+      }
+    }
+    resolveTap=null;
+    if(token!==run) return null;
+    $("rxBar").style.width="100%";
+    rxAvg=Math.round(times.reduce(function(a,b){return a+b},0)/times.length);
+    return true;
+  }
+
+  // ---------- Result ----------
+  function result(){
+    var memPts=Math.min(memBest,MAXLEN)/MAXLEN*60;
+    var rxPts=Math.max(0,Math.min(1,(550-rxAvg)/(550-200)))*40;
+    var score=Math.round(memPts+rxPts);
+    var lv, cls, line;
+    if(score<25){lv=1;cls="Rookie Mind";line="Every legend starts at Level 1. Your focus has the most room to grow."}
+    else if(score<45){lv=2;cls="Apprentice Mind";line="Solid base. A few focused minutes a day moves this fast."}
+    else if(score<65){lv=3;cls="Strategist Mind";line="Sharp. You hold patterns and react well under pressure."}
+    else if(score<85){lv=4;cls="Sage Mind";line="Rare. Your memory and reflexes are both ahead of the pack."}
+    else{lv=5;cls="Archmage Mind";line="Top tier. Now send this to a friend and see if they can beat you."}
+    $("rHandle").textContent=handle;
+    $("rLvl").textContent="LV "+lv; $("rCls").textContent=cls;
+    $("rMem").textContent=memBest+"/"+MAXLEN; $("rRx").textContent=rxAvg+" ms"; $("rScore").textContent=score;
+    $("rLine").textContent=line;
+    resultText="MahoKARSHa Mind Scan — "+(handle?handle+" — ":"")+"LV "+lv+" "+cls+" — memory "+memBest+"/"+MAXLEN+", reflex "+rxAvg+" ms, score "+score;
+    $("rText").value=resultText;
+    if(FORM_URL){
+      var u=FORM_URL; $("formBtn").href=u; $("formBtn").hidden=false;
+    }
+    show("s-res");
+  }
+
+  async function go(){
+    var v=$("ig").value.trim().replace(/[^A-Za-z0-9._@]/g,"");
+    if(v && v[0]!=="@") v="@"+v;
+    handle=v; memBest=0; rxAvg=0;
+    var token=++run;
+    if(await memory(token)){ if(await reflex(token)) result(); }
+  }
+  $("start").onclick=go;
+  $("again").onclick=function(){ run++; show("s-intro"); };
+  show("s-intro");
+})();
+</script>
+
+</body></html>
